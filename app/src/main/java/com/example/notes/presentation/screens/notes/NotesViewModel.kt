@@ -78,7 +78,6 @@ class NotesViewModel: ViewModel() {
                 )
             }
         }
-
     }
 
     fun processCommand(command: NoteCommands) {
