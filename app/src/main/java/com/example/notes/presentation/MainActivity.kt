@@ -1,6 +1,7 @@
 package com.example.notes.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.notes.presentation.screens.creation.CreateNoteScreen
+import com.example.notes.presentation.screens.notes.NotesScreen
 import com.example.notes.presentation.ui.theme.NotesTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +22,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                CreateNoteScreen(
+                    onFinished = {
+                        Log.d("CreateNoteScreen", "Finished")
+                    }
+                )
+//                NotesScreen(
+//                    onNoteClick = {
+//                        Log.d("MainActivity", "Click on Note $it.id")
+//                    },
+//                    onFloatingActionButtonClick = {
+//                        Log.d("MainActivity", "Click on Action Button")
+//                    }
+//                )
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NotesTheme {
-        Greeting("Android")
     }
 }

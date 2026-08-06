@@ -1,33 +1,34 @@
 package com.example.notes.data
 
-import androidx.compose.runtime.MutableState
 import com.example.notes.domain.Note
 import com.example.notes.domain.NotesRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlin.collections.map
+import kotlin.time.Duration.Companion.milliseconds
 
 object TestNotesRepositoryImpl : NotesRepository {
 
     private val notesListFlow = MutableStateFlow<List<Note>>(listOf())
 
-    override fun addNote(title: String, content: String) {
+    override suspend fun addNote(title: String, content: String, isPinned: Boolean, updatedAt: Long) {
         notesListFlow.update {oldList ->
             val note = Note(
                 id = oldList.size,
                 title = title,
                 content = content,
-                updatedAt = System.currentTimeMillis(),
-                isPinned = false
+                updatedAt = updatedAt,
+                isPinned = isPinned
             )
             oldList + note
         }
     }
 
-    override fun deleteNote(noteId: Int) {
+    override suspend fun deleteNote(noteId: Int) {
         notesListFlow.update { oldList ->
             oldList.toMutableList().apply {
                 removeIf { it ->
@@ -37,7 +38,7 @@ object TestNotesRepositoryImpl : NotesRepository {
         }
     }
 
-    override fun editNote(note: Note) {
+    override suspend fun editNote(note: Note) {
         notesListFlow.update {oldList ->
             oldList.map { it ->
                 if (it.id == note.id) { note }
@@ -50,7 +51,7 @@ object TestNotesRepositoryImpl : NotesRepository {
         return notesListFlow.asStateFlow()
     }
 
-    override fun getNote(noteId: Int): Note {
+    override suspend fun getNote(noteId: Int): Note {
         return notesListFlow.value.first {it ->
             it.id == noteId
         }
@@ -64,7 +65,7 @@ object TestNotesRepositoryImpl : NotesRepository {
         }
     }
 
-    override fun switchPinnedStatus(noteId: Int) {
+    override suspend fun switchPinnedStatus(noteId: Int) {
         notesListFlow.update { oldList ->
             oldList.map {it ->
                 if (it.id == noteId) {
