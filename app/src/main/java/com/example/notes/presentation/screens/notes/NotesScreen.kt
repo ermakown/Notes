@@ -1,12 +1,9 @@
 package com.example.notes.presentation.screens.notes
 
-import android.R.attr.lineHeight
-import android.R.attr.text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -27,14 +23,12 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.notes.R
 import com.example.notes.domain.Note
 import com.example.notes.presentation.ui.theme.Brown
-import com.example.notes.presentation.ui.theme.Green
 import com.example.notes.presentation.ui.theme.NotesTheme
 import com.example.notes.presentation.ui.theme.OtherNotesColors
 import com.example.notes.presentation.ui.theme.PinnedNotesColors
@@ -341,7 +334,7 @@ fun NoteCard(
             modifier = Modifier.height(8.dp)
         )
         Text(
-            text = DateFormatter.formatToString(note.updatedAt),
+            text = DateFormatter.formatDateToString(note.updatedAt),
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

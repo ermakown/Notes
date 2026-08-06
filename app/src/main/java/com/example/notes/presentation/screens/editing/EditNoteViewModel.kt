@@ -106,7 +106,7 @@ sealed interface EditNoteState {
         val note: Note
     ): EditNoteState {
 
-        val isStateFinished: Boolean
+        val isSaveEnabled: Boolean
             get() = note.title.isNotBlank() && note.content.isNotBlank()
     }
 
