@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import com.example.notes.presentation.navigation.NavGraph
 import com.example.notes.presentation.screens.creation.CreateNoteScreen
 import com.example.notes.presentation.screens.editing.EditNoteScreen
 import com.example.notes.presentation.screens.notes.NotesScreen
@@ -23,25 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesTheme {
-                EditNoteScreen(
-                    noteId = 5,
-                    onFinished = {
-                        Log.d("EditNoteScreen", "Editing")
-                    }
-                )
-//                CreateNoteScreen(
-//                    onFinished = {
-//                        Log.d("CreateNoteScreen", "Finished")
-//                    }
-//                )
-//                NotesScreen(
-//                    onNoteClick = {
-//                        Log.d("MainActivity", "Click on Note $it.id")
-//                    },
-//                    onFloatingActionButtonClick = {
-//                        Log.d("MainActivity", "Click on Action Button")
-//                    }
-//                )
+                NavGraph()
             }
         }
     }
