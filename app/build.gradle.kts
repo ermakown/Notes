@@ -40,7 +40,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler.v250)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     implementation(libs.androidx.navigation.compose)
