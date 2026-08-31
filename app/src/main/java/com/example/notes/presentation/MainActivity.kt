@@ -18,7 +18,10 @@ import com.example.notes.presentation.screens.creation.CreateNoteScreen
 import com.example.notes.presentation.screens.editing.EditNoteScreen
 import com.example.notes.presentation.screens.notes.NotesScreen
 import com.example.notes.presentation.ui.theme.NotesTheme
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

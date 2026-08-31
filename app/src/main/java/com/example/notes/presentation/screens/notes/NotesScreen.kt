@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.notes.R
 import com.example.notes.domain.Note
@@ -53,10 +54,7 @@ import com.example.notes.presentation.utils.DateFormatter
 @Composable
 fun NotesScreen(
     modifier: Modifier = Modifier,
-    context: Context = LocalContext.current.applicationContext,
-    viewModel: NotesViewModel = viewModel {
-        NotesViewModel(context)
-    },
+    viewModel: NotesViewModel = hiltViewModel(),
     onNoteClick: (Note) -> Unit,
     onFloatingActionButtonClick: () -> Unit
 ) {
