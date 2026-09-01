@@ -12,29 +12,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import com.example.notes.presentation.navigation.NavGraph
 import com.example.notes.presentation.screens.creation.CreateNoteScreen
+import com.example.notes.presentation.screens.editing.EditNoteScreen
 import com.example.notes.presentation.screens.notes.NotesScreen
 import com.example.notes.presentation.ui.theme.NotesTheme
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             NotesTheme {
-                CreateNoteScreen(
-                    onFinished = {
-                        Log.d("CreateNoteScreen", "Finished")
-                    }
-                )
-//                NotesScreen(
-//                    onNoteClick = {
-//                        Log.d("MainActivity", "Click on Note $it.id")
-//                    },
-//                    onFloatingActionButtonClick = {
-//                        Log.d("MainActivity", "Click on Action Button")
-//                    }
-//                )
+                NavGraph()
             }
         }
     }

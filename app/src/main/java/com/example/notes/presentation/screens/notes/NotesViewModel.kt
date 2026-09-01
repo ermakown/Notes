@@ -2,13 +2,16 @@
 
 package com.example.notes.presentation.screens.notes
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.notes.data.NotesRepositoryImpl
 import com.example.notes.data.TestNotesRepositoryImpl
 import com.example.notes.domain.GetAllNotesUseCase
 import com.example.notes.domain.Note
 import com.example.notes.domain.SearchNotesUseCase
 import com.example.notes.domain.SwitchPinnedStatusUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,13 +20,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotesViewModel: ViewModel() {
+@HiltViewModel
+class NotesViewModel @Inject constructor(
+    private val getAllNotesUseCase: GetAllNotesUseCase,
+    private val searchNotesUseCase: SearchNotesUseCase,
+    private val switchPinnedStatusUseCase: SwitchPinnedStatusUseCase
+): ViewModel() {
 
-    private val repository = TestNotesRepositoryImpl
-    private val getAllNotesUseCase = GetAllNotesUseCase(repository)
-    private val searchNotesUseCase = SearchNotesUseCase(repository)
-    private val switchPinnedStatusUseCase = SwitchPinnedStatusUseCase(repository)
     private val query = MutableStateFlow("")
     private val _state = MutableStateFlow(NoteScreenState())
     val state = _state.asStateFlow()

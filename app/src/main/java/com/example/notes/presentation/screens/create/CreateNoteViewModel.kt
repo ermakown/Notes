@@ -1,31 +1,34 @@
 package com.example.notes.presentation.screens.creation
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.notes.data.NotesRepositoryImpl
 import com.example.notes.data.TestNotesRepositoryImpl
 import com.example.notes.domain.AddNoteUseCase
-import com.example.notes.presentation.screens.creation.CreateNoteState.Creation
+import com.example.notes.presentation.screens.creation.EditNoteState.Creation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateNoteViewModel: ViewModel() {
-
-    private val repository = TestNotesRepositoryImpl
-    private val addNoteUseCase = AddNoteUseCase(repository)
-
-    private val _state = MutableStateFlow<CreateNoteState>(Creation())
+@HiltViewModel
+class CreateNoteViewModel @Inject constructor(
+    private val addNoteUseCase: AddNoteUseCase
+): ViewModel() {
+    private val _state = MutableStateFlow<EditNoteState>(Creation())
     val state = _state.asStateFlow()
 
-    fun processCommand(command: CreateNoteCommand) {
+    fun processCommand(command: EditNoteCommand) {
         when(command) {
-            CreateNoteCommand.Back -> {
+            EditNoteCommand.Back -> {
                 _state.update {
-                    CreateNoteState.Finished
+                    EditNoteState.Finished
                 }
             }
-            is CreateNoteCommand.InputContent -> {
+            is EditNoteCommand.InputContent -> {
                 _state.update {previousState ->
                     if (previousState is Creation) {
                         previousState.copy(
@@ -37,7 +40,7 @@ class CreateNoteViewModel: ViewModel() {
                     }
                 }
             }
-            is CreateNoteCommand.InputTitle -> {
+            is EditNoteCommand.InputTitle -> {
                 _state.update {previousState ->
                     if (previousState is Creation) {
                         previousState.copy(
@@ -49,14 +52,14 @@ class CreateNoteViewModel: ViewModel() {
                     }
                 }
             }
-            CreateNoteCommand.Save -> {
+            EditNoteCommand.Save -> {
                 viewModelScope.launch {
                     _state.update {previousState ->
                         if (previousState is Creation) {
                             val title = previousState.title
                             val content = previousState.content
                             addNoteUseCase(title, content)
-                            CreateNoteState.Finished
+                            EditNoteState.Finished
                         } else {
                             previousState
                         }
@@ -67,24 +70,24 @@ class CreateNoteViewModel: ViewModel() {
     }
 }
 
-sealed interface CreateNoteCommand {
+sealed interface EditNoteCommand {
 
-    data class InputTitle(val title: String): CreateNoteCommand
+    data class InputTitle(val title: String): EditNoteCommand
 
-    data class InputContent(val content: String): CreateNoteCommand
+    data class InputContent(val content: String): EditNoteCommand
 
-    data object Save: CreateNoteCommand
+    data object Save: EditNoteCommand
 
-    data object Back: CreateNoteCommand
+    data object Back: EditNoteCommand
 }
 
-sealed interface CreateNoteState {
+sealed interface EditNoteState {
 
     data class Creation(
         val title: String = "",
         val content: String = "",
         val isSaveEnabled: Boolean = false
-    ): CreateNoteState
+    ): EditNoteState
 
-    data object Finished: CreateNoteState
+    data object Finished: EditNoteState
 }
