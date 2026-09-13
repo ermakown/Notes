@@ -1,10 +1,7 @@
 package com.example.notes.presentation.screens.creation
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.notes.data.NotesRepositoryImpl
-import com.example.notes.data.TestNotesRepositoryImpl
 import com.example.notes.domain.AddNoteUseCase
 import com.example.notes.presentation.screens.creation.EditNoteState.Creation
 import dagger.hilt.android.lifecycle.HiltViewModel
