@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.notes.R
+import com.example.notes.domain.ContentItem
 import com.example.notes.domain.Note
 import com.example.notes.presentation.ui.theme.Brown
 import com.example.notes.presentation.ui.theme.NotesTheme
@@ -344,13 +345,18 @@ fun NoteCard(
         Spacer(
             modifier = Modifier.padding(16.dp)
         )
-        Text(
-            text = note.content,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Medium,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
-        )
+        note.content
+            .filterIsInstance<ContentItem.Text>()
+            .joinToString("\n") { it.content }
+            .let {
+                Text(
+                    text = it,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
     }
 }
