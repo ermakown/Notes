@@ -1,11 +1,9 @@
 package com.example.notes.presentation.screens.creation
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.notes.data.NotesRepositoryImpl
-import com.example.notes.data.TestNotesRepositoryImpl
 import com.example.notes.domain.AddNoteUseCase
+import com.example.notes.domain.ContentItem
 import com.example.notes.presentation.screens.creation.EditNoteState.Creation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,8 +55,8 @@ class CreateNoteViewModel @Inject constructor(
                     _state.update {previousState ->
                         if (previousState is Creation) {
                             val title = previousState.title
-                            val content = previousState.content
-                            addNoteUseCase(title, content)
+                            val content = ContentItem.Text(previousState.content)
+                            addNoteUseCase(title, listOf(content))
                             EditNoteState.Finished
                         } else {
                             previousState
