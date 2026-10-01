@@ -1,10 +1,10 @@
 package com.example.notes.presentation.screens.notes
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -30,10 +30,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import com.example.notes.R
 import com.example.notes.domain.ContentItem
 import com.example.notes.domain.Note
@@ -317,6 +318,7 @@ fun NoteCard(
     onShortClick: (Note) -> Unit,
     onLongClick: (Note) -> Unit
 ) {
+    val firstImage = note.content.filterIsInstance<ContentItem.Image>().firstOrNull()
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
@@ -325,38 +327,89 @@ fun NoteCard(
                 onClick = { onShortClick(note) },
                 onLongClick = { onLongClick(note) }
             )
-            .padding(16.dp)
     ) {
-        Text(
-            text = note.title,
-            fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
-        Text(
-            text = DateFormatter.formatDateToString(note.updatedAt),
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(
-            modifier = Modifier.padding(16.dp)
-        )
-        note.content
-            .filterIsInstance<ContentItem.Text>()
-            .joinToString("\n") { it.content }
-            .let {
+        if (firstImage != null) {
+            Box(
+                modifier = Modifier.clip(RoundedCornerShape(16.dp))
+            ) {
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp),
+                    model = firstImage.url,
+                    contentDescription = "First note image",
+                    contentScale = ContentScale.Crop
+                )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .background(color = Color.White.copy(alpha = 0.7f), shape = RoundedCornerShape(8.dp))
+                            .padding(8.dp),
+                        text = note.title,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(
+                        modifier = Modifier.height(8.dp)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .background(color = Color.White.copy(alpha = 0.7f), shape = RoundedCornerShape(8.dp))
+                            .padding(8.dp),
+                        text = DateFormatter.formatDateToString(note.updatedAt),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+            ) {
                 Text(
-                    text = it,
-                    fontSize = 16.sp,
+                    text = note.title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 3,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+                Text(
+                    text = DateFormatter.formatDateToString(note.updatedAt),
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+        }
+
+        val textContent = note.content.filterIsInstance<ContentItem.Text>().joinToString("") { it.content }
+        if (textContent.isNotBlank()) {
+            note.content
+                .filterIsInstance<ContentItem.Text>()
+                .joinToString("\n") { it.content }
+                .let {
+                    Text(
+                        modifier = Modifier
+                            .padding(16.dp),
+                        text = it,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+        }
     }
 }
