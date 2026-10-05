@@ -111,18 +111,40 @@ class EditNoteViewModel @AssistedInject constructor(
                 }
             }
             is EditNoteCommand.DeleteImage -> {
-                _state.update {previousState ->
+                _state.update { previousState ->
                     if (previousState is EditNoteState.Editing) {
                         val newItems = previousState.note.content.toMutableList()
 
                         if (command.index in newItems.indices && newItems[command.index] is ContentItem.Image) {
                             newItems.removeAt(command.index)
 
-                            val nextItem = newItems.getOrNull(command.index)
-                            if (nextItem is ContentItem.Text && nextItem.content.isEmpty()) {
-                                newItems.removeAt(command.index)
+                            val beforeIndex = command.index - 1
+                            val afterIndex = command.index
+
+                            if (beforeIndex >= 0 && afterIndex < newItems.size) {
+                                val beforeItem = newItems[beforeIndex]
+                                val afterItem = newItems[afterIndex]
+
+                                if (beforeItem is ContentItem.Text && afterItem is ContentItem.Text) {
+                                    val combinedText = buildString {
+                                        append(beforeItem.content)
+
+                                        if (beforeItem.content.isNotEmpty() && afterItem.content.isNotEmpty()) {
+                                            append("\n")
+                                        }
+                                        append(afterItem.content)
+                                    }
+
+                                    newItems[beforeIndex] = ContentItem.Text(combinedText)
+                                    newItems.removeAt(afterIndex)
+                                }
                             }
                         }
+
+                        if (newItems.isEmpty()) {
+                            newItems.add(ContentItem.Text(""))
+                        }
+
                         previousState.copy(note = previousState.note.copy(content = newItems))
                     } else {
                         previousState

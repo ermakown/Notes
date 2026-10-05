@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="search">Search…</string>
+    <string name="all_notes">All notes</string>
+    <string name="no_notes_yet">No notes yet. Add the first one.</string>
+    <string name="pinned">Pinned</string>
+    <string name="others">Others</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="save_note">Save Note</string>
+    <string name="edit_title">Title</string>
+    <string name="create_note">Create Note</string>
+    <string name="create_title">Title</string>
+    <string name="just_now">Just now</string>
+    <string name="h_ago">%1$d h ago</string>
 </resources>

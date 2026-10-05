@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -33,9 +35,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -88,7 +92,7 @@ fun NotesScreen(
                 item {
                     Title(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = "All notes"
+                        text = stringResource(R.string.all_notes)
                     )
                 }
                 item {
@@ -114,7 +118,7 @@ fun NotesScreen(
                     Text(
                         modifier = Modifier
                             .padding(24.dp),
-                        text = "No notes yet. Add the first one.",
+                        text = stringResource(R.string.no_notes_yet),
                         textAlign = TextAlign.Center,
                         fontSize = 35.sp,
                         color = Brown,
@@ -132,7 +136,7 @@ fun NotesScreen(
                 item {
                     Title(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = "All notes"
+                        text = stringResource(R.string.all_notes)
                     )
                 }
                 item {
@@ -157,7 +161,7 @@ fun NotesScreen(
                 item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = "Pinned"
+                        text = stringResource(R.string.pinned)
                     )
                 }
                 item {
@@ -178,7 +182,8 @@ fun NotesScreen(
                         ) {index, note ->
                             NoteCard(
                                 modifier = Modifier
-                                    .widthIn(max = 160.dp),
+                                    .width(160.dp)
+                                    .heightIn(150.dp),
                                 note = note,
                                 onShortClick = onNoteClick,
                                 onLongClick = {
@@ -197,7 +202,7 @@ fun NotesScreen(
                 item {
                     Subtitle(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        text = "Others"
+                        text = stringResource(R.string.others)
                     )
                 }
                 item {
@@ -272,7 +277,7 @@ private fun SearchBar(
         onValueChange = onQueryChange,
         placeholder = {
             Text(
-                text = "Search...",
+                text = stringResource(R.string.search),
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -342,17 +347,23 @@ fun NoteCard(
                 )
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.onSurface
+                                )
+                            )
+                        )
                         .align(Alignment.BottomStart)
                         .padding(16.dp)
                 ) {
                     Text(
-                        modifier = Modifier
-                            .background(color = Color.White.copy(alpha = 0.7f), shape = RoundedCornerShape(8.dp))
-                            .padding(8.dp),
                         text = note.title,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = Color.White,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -360,12 +371,9 @@ fun NoteCard(
                         modifier = Modifier.height(8.dp)
                     )
                     Text(
-                        modifier = Modifier
-                            .background(color = Color.White.copy(alpha = 0.7f), shape = RoundedCornerShape(8.dp))
-                            .padding(8.dp),
                         text = DateFormatter.formatDateToString(note.updatedAt),
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = Color.White
                     )
                 }
             }

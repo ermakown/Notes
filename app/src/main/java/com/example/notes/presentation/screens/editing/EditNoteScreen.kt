@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,12 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import com.example.notes.R
 import com.example.notes.domain.ContentItem
 import com.example.notes.presentation.screens.editing.EditNoteCommand.InputTitle
 import com.example.notes.presentation.ui.theme.CustomIcons
@@ -76,7 +79,7 @@ fun EditNoteScreen(
                     TopAppBar(
                         title = {
                             Text(
-                                text = "Edit Note",
+                                text = stringResource(R.string.edit_note),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
@@ -100,7 +103,7 @@ fun EditNoteScreen(
                             Icon(
                                 modifier = Modifier
                                     .padding(end = 16.dp)
-                                    .clickable{
+                                    .clickable {
                                         viewModel.processCommand(EditNoteCommand.Delete)
                                     },
                                 imageVector = Icons.Outlined.Delete,
@@ -111,7 +114,7 @@ fun EditNoteScreen(
                             Icon(
                                 modifier = Modifier
                                     .padding(start = 16.dp, end = 8.dp)
-                                    .clickable{
+                                    .clickable {
                                         viewModel.processCommand(EditNoteCommand.Back)
                                     },
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -122,7 +125,9 @@ fun EditNoteScreen(
                 }
             ) {innerPadding ->
                 Column(
-                    modifier = modifier.padding(innerPadding)
+                    modifier = modifier
+                        .padding(innerPadding)
+                        .imePadding()
                 ) {
                     TextField(
                         modifier = Modifier
@@ -145,7 +150,7 @@ fun EditNoteScreen(
                         ),
                         placeholder = {
                             Text(
-                                text = "Title",
+                                text = stringResource(R.string.edit_title),
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface.copy(
@@ -193,7 +198,7 @@ fun EditNoteScreen(
                         )
                     ) {
                         Text(
-                            text = "Save Note"
+                            text = stringResource(R.string.save_note)
                         )
                     }
                 }
@@ -256,7 +261,7 @@ private fun ImageContent(
                 .align(Alignment.TopEnd)
                 .padding(8.dp)
                 .size(24.dp)
-                .clickable{
+                .clickable {
                     onDeleteImageClick()
                 },
             imageVector = Icons.Default.Close,
