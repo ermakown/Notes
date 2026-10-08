@@ -232,17 +232,6 @@ fun NotesScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun PreviewNotesScreen() {
-    NotesTheme {
-        NotesScreen(
-            onNoteClick = {},
-            onFloatingActionButtonClick = {}
-        )
-    }
-}
-
 // Title function
 @Composable
 private fun Title(
