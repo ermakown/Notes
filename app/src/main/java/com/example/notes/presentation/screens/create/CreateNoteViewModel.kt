@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.notes.domain.AddNoteUseCase
 import com.example.notes.domain.ContentItem
+import com.example.notes.domain.ContentItem.Image
+import com.example.notes.domain.ContentItem.Text
 import com.example.notes.presentation.screens.creation.CreateNoteState.Creation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,13 +86,40 @@ class CreateNoteViewModel @Inject constructor(
                 }
             }
             is CreateNoteCommand.DeleteImage -> {
-                _state.update {previousState ->
+                _state.update { previousState ->
                     if (previousState is Creation) {
-                        previousState.content.toMutableList().apply {
-                            removeAt(command.index)
-                        }.let {
-                            previousState.copy(content = it)
+                        val newItems = previousState.content.toMutableList()
+
+                        if (command.index in newItems.indices && newItems[command.index] is Image) {
+                            newItems.removeAt(command.index)
+
+                            val beforeIndex = command.index - 1
+                            val afterIndex = command.index
+
+                            if (beforeIndex >= 0 && afterIndex < newItems.size) {
+                                val beforeItem = newItems[beforeIndex]
+                                val afterItem = newItems[afterIndex]
+
+                                if (beforeItem is Text && afterItem is Text) {
+                                    val combinedText = buildString {
+                                        append(beforeItem.content)
+                                        if (beforeItem.content.isNotEmpty() && afterItem.content.isNotEmpty()) {
+                                            append("\n")
+                                        }
+                                        append(afterItem.content)
+                                    }
+
+                                    newItems[beforeIndex] = Text(combinedText)
+                                    newItems.removeAt(afterIndex)
+                                }
+                            }
                         }
+
+                        if (newItems.isEmpty()) {
+                            newItems.add(Text(""))
+                        }
+
+                        previousState.copy(content = newItems)
                     } else {
                         previousState
                     }
